@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Concentration & Focus Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="logo">📊 Find your Focus Level</h1>
+                    <p class="tagline">Understand & Improve Your Concentration</p>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Section - Input Form -->
+            <section class="input-section">
+                <div class="form-container">
+                    <h2 class="section-title">Your daily inputs</h2>
+                    <p class="section-subtitle">Honest answers give the best estimate.</p>
+
+                    <form id="focusForm" class="focus-form">
+                        <!-- Name Input -->
+                        <div class="form-group">
+                            <label for="nameInput" class="form-label">Your name <span class="optional">(optional)</span></label>
+                            <input 
+                                type="text" 
+                                id="nameInput" 
+                                class="form-input" 
+                                placeholder="e.g. Ali"
+                                maxlength="50"
+                            >
+                        </div>
+
+                        <!-- Sleep Hours Slider -->
+                        <div class="form-group">
+                            <label for="sleepSlider" class="form-label">
+                                Hours of sleep last night
+                                <span class="slider-value" id="sleepValue">7h</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="sleepSlider" 
+                                class="slider" 
+                                min="0" 
+                                max="12" 
+                                value="7"
+                                step="0.5"
+                            >
+                            <div class="slider-track"></div>
+                        </div>
+
+                        <!-- Screen Time Slider -->
+                        <div class="form-group">
+                            <label for="screenSlider" class="form-label">
+                                Daily recreational screen time
+                                <span class="slider-value" id="screenValue">3h</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="screenSlider" 
+                                class="slider" 
+                                min="0" 
+                                max="12" 
+                                value="3"
+                                step="0.5"
+                            >
+                            <div class="slider-track"></div>
+                        </div>
+
+                        <!-- Caffeine Slider -->
+                        <div class="form-group">
+                            <label for="caffeineSlider" class="form-label">
+                                Caffeinated drinks today
+                                <span class="slider-value" id="caffeineValue">1 cups</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="caffeineSlider" 
+                                class="slider" 
+                                min="0" 
+                                max="10" 
+                                value="1"
+                                step="0.5"
+                            >
+                            <div class="slider-track"></div>
+                        </div>
+
+                        <!-- Breaks Slider -->
+                        <div class="form-group">
+                            <label for="breaksSlider" class="form-label">
+                                Short breaks per study hour
+                                <span class="slider-value" id="breaksValue">1</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="breaksSlider" 
+                                class="slider" 
+                                min="0" 
+                                max="5" 
+                                value="1"
+                                step="0.5"
+                            >
+                            <div class="slider-track"></div>
+                        </div>
+
+                        <!-- Study Environment -->
+                        <div class="form-group">
+                            <label class="form-label">Study environment</label>
+                            <div class="button-group">
+                                <button 
+                                    type="button" 
+                                    class="env-btn active" 
+                                    data-env="quiet"
+                                    data-score="3"
+                                >
+                                    Quiet
+                                </button>
+                                <button 
+                                    type="button" 
+                                    class="env-btn" 
+                                    data-env="moderate"
+                                    data-score="2"
+                                >
+                                    Moderate
+                                </button>
+                                <button 
+                                    type="button" 
+                                    class="env-btn" 
+                                    data-env="noisy"
+                                    data-score="1"
+                                >
+                                    Noisy
+                                </button>
+                            </div>
+                            <input type="hidden" id="environmentInput" value="quiet">
+                        </div>
+
+                        <!-- Exercise Checkbox -->
+                        <div class="form-group checkbox-group">
+                            <input 
+                                type="checkbox" 
+                                id="exerciseCheckbox" 
+                                class="form-checkbox"
+                            >
+                            <label for="exerciseCheckbox" class="checkbox-label">
+                                I exercised today (20+ minutes)
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn-submit">
+                            Analyze my focus
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Right Section - Results -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-container">
+                    <!-- Focus Duration Card -->
+                    <div class="focus-card">
+                        <div class="focus-header">
+                            <span class="focus-icon">⏱️</span>
+                            <span class="focus-label">ESTIMATED FOCUS</span>
+                        </div>
+                        <div class="focus-value">
+                            <span id="focusDuration">90</span>
+                            <span class="focus-unit">min</span>
+                        </div>
+                        <p class="focus-subtitle">per focused session</p>
+                        
+                        <div class="score-bar">
+                            <div class="score-bar-fill" id="scoreBarFill"></div>
+                        </div>
+                        <div class="score-text">
+                            Focus score: <span id="focusScore">100</span>/100 - <span id="scoreLevel">Excellent</span>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations Card -->
+                    <div class="recommendations-card">
+                        <h3 class="recommendations-title">
+                            <span class="rec-icon">💡</span>
+                            Recommendations
+                        </h3>
+                        <div id="recommendationsList" class="recommendations-list">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <!-- Download Button -->
+                    <button id="downloadBtn" class="btn-download">
+                        <span class="download-icon">⬇️</span>
+                        Download report (.txt)
+                    </button>
+                    <p class="download-subtitle">Submit the form to unlock your downloadable report.</p>
+
+                    <!-- Edit Button -->
+                    <button id="editBtn" class="btn-edit">
+                        ← Edit Answers
+                    </button>
+                </div>
+            </section>
+
+            <!-- Tips Section (Initial State) -->
+            <section class="tips-section" id="tipsSection">
+                <div class="tips-container">
+                    <h3 class="tips-title">💬 Quick Tips for Better Focus</h3>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <span class="tip-emoji">😴</span>
+                            <h4>Sleep Well</h4>
+                            <p>7-9 hours of sleep significantly boosts concentration and memory retention.</p>
+                        </div>
+                        <div class="tip-card">
+                            <span class="tip-emoji">📱</span>
+                            <h4>Screen Time</h4>
+                            <p>Reduce recreational screen time before study sessions for better focus.</p>
+                        </div>
+                        <div class="tip-card">
+                            <span class="tip-emoji">☕</span>
+                            <h4>Caffeine Timing</h4>
+                            <p>Moderate caffeine can help, but too much can cause jitteriness and anxiety.</p>
+                        </div>
+                        <div class="tip-card">
+                            <span class="tip-emoji">🚴</span>
+                            <h4>Physical Activity</h4>
+                            <p>Regular exercise improves blood flow and cognitive function significantly.</p>
+                        </div>
+                        <div class="tip-card">
+                            <span class="tip-emoji">🏠</span>
+                            <h4>Environment Matters</h4>
+                            <p>A quiet, well-organized study space enhances concentration and productivity.</p>
+                        </div>
+                        <div class="tip-card">
+                            <span class="tip-emoji">⏸️</span>
+                            <h4>Take Breaks</h4>
+                            <p>Short breaks every hour improve focus and prevent mental fatigue.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Student Concentration & Focus Tracker | Build your productivity habits</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
